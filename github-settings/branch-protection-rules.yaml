@@ -1,0 +1,247 @@
+# Branch Protection Rules
+
+## Overview
+
+This file defines the desired state for GitHub branch protection rules across all repositories in the organization.
+
+## Default Rules for All Repositories
+
+### Main Branch Protection
+
+```yaml
+branches:
+  main:
+    protection:
+      # Require pull requests
+      required_pull_request_reviews:
+        required_approving_review_count: 2
+        dismiss_stale_reviews: true
+        require_code_owner_reviews: true
+        require_last_push_approval: false
+      
+      # Required status checks
+      required_status_checks:
+        strict: true  # Require branches to be up to date before merging
+        checks:
+          - context: "ci-tests"
+            app_id: null  # GitHub Actions
+          - context: "security-scan"
+            app_id: null
+      
+      # Restrictions
+      enforce_admins: true  # Rules apply to admins too
+      restrictions: null  # No push restrictions
+      
+      # Other settings
+      required_linear_history: false
+      allow_force_pushes: false
+      allow_deletions: false
+      required_conversation_resolution: true  # All PR conversations must be resolved
+      lock_branch: false
+      allow_fork_syncing: true
+```
+
+### Development Branch Protection
+
+```yaml
+  development:
+    protection:
+      # Require pull requests
+      required_pull_request_reviews:
+        required_approving_review_count: 1
+        dismiss_stale_reviews: true
+        require_code_owner_reviews: false
+        require_last_push_approval: false
+      
+      # Required status checks
+      required_status_checks:
+        strict: true
+        checks:
+          - context: "ci-tests"
+            app_id: null
+      
+      # Restrictions
+      enforce_admins: false  # Allow admin overrides for development
+      restrictions: null
+      
+      # Other settings
+      required_linear_history: false
+      allow_force_pushes: false
+      allow_deletions: false
+      required_conversation_resolution: true
+      lock_branch: false
+      allow_fork_syncing: true
+```
+
+## Repository-Specific Overrides
+
+### Critical Production Repositories
+
+For repositories that handle sensitive data or critical infrastructure:
+
+```yaml
+repositories:
+  - name: "payment-service"
+    branches:
+      main:
+        protection:
+          required_pull_request_reviews:
+            required_approving_review_count: 3  # Increased from 2
+          required_status_checks:
+            checks:
+              - context: "ci-tests"
+              - context: "security-scan"
+              - context: "compliance-check"  # Additional check
+              - context: "performance-tests"
+          enforce_admins: true
+```
+
+### Documentation Repositories
+
+For documentation-only repositories:
+
+```yaml
+  - name: "documentation"
+    branches:
+      main:
+        protection:
+          required_pull_request_reviews:
+            required_approving_review_count: 1  # Reduced from 2
+          required_status_checks:
+            checks:
+              - context: "markdown-lint"
+              - context: "link-checker"
+          enforce_admins: false
+```
+
+## Status Check Definitions
+
+### CI Tests
+
+```yaml
+status_checks:
+  ci-tests:
+    description: "Runs unit tests, integration tests, and linting"
+    required: true
+    workflow: ".github/workflows/test.yml"
+    timeout_minutes: 15
+```
+
+### Security Scan
+
+```yaml
+  security-scan:
+    description: "CodeQL security analysis and dependency scanning"
+    required: true
+    workflow: ".github/workflows/security.yml"
+    timeout_minutes: 10
+```
+
+### Performance Tests
+
+```yaml
+  performance-tests:
+    description: "Performance regression tests"
+    required: false  # Optional for most repos
+    workflow: ".github/workflows/performance.yml"
+    timeout_minutes: 20
+```
+
+## Enforcement Strategy
+
+### Validation
+
+Use GitHub API to validate actual settings match desired state:
+
+```bash
+# Script to check compliance
+./scripts/validate-branch-protection.sh
+```
+
+### Auto-remediation
+
+```yaml
+# GitHub Action to enforce settings
+name: Enforce Branch Protection
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Daily
+  workflow_dispatch:
+
+jobs:
+  enforce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Apply branch protection rules
+        run: |
+          # Read desired state from this file
+          # Compare with actual GitHub settings
+          # Apply missing/incorrect settings
+```
+
+## Migration Guide
+
+### Applying to Existing Repositories
+
+1. **Audit current settings**: Run compliance check
+2. **Identify gaps**: Compare actual vs desired
+3. **Plan rollout**: Start with non-critical repos
+4. **Apply settings**: Use GitHub API or Terraform
+5. **Verify**: Check settings applied correctly
+6. **Monitor**: Watch for issues or blockers
+
+### Terraform Example
+
+```hcl
+resource "github_branch_protection" "main" {
+  repository_id = github_repository.repo.node_id
+  pattern       = "main"
+
+  required_pull_request_reviews {
+    required_approving_review_count = 2
+    dismiss_stale_reviews          = true
+    require_code_owner_reviews     = true
+  }
+
+  required_status_checks {
+    strict = true
+    contexts = [
+      "ci-tests",
+      "security-scan"
+    ]
+  }
+
+  enforce_admins = true
+}
+```
+
+## Exceptions Process
+
+### Requesting an Exception
+
+1. Create issue in governance repo
+2. Explain why exception needed
+3. Get approval from tech leadership
+4. Document in this file
+5. Set reminder to review/expire exception
+
+### Temporary Exceptions
+
+```yaml
+exceptions:
+  - repository: "experimental-project"
+    branch: "main"
+    reason: "Early development, frequent force pushes needed"
+    requested_by: "@user"
+    approved_by: "@tech-lead"
+    expires: "2025-12-31"
+    override:
+      allow_force_pushes: true
+```
+
+---
+
+**Version**: 1.0.0  
+**Last Updated**: 2025-11-23  
+**Maintained by**: DevOps Team
