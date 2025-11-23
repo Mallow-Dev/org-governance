@@ -50,9 +50,12 @@ async function main() {
         ...protectionRules,
       });
       console.log(`✅ ${repo.name}: Protected 'main'`);
-    } catch (error: any) {
-      console.error(`❌ ${repo.name}: Failed to protect 'main'`, error.message);
-    }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(`❌ ${repo.name}: Failed to protect 'main'`, error.message);
+      } else {
+        console.error(`❌ ${repo.name}: Failed to protect 'main'`, error);
+      }
   }
 }
 
