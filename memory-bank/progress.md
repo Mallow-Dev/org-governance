@@ -30,10 +30,12 @@
 
 ## Change Log
 
-> **Policy**: This section is **append-only**. Never delete entries. Log all significant updates here.
+> **Policy**: This section is **append-only**. Add new entries to the **top** of the table.
 
-| Date       | Phase      | Change                                | Author  |
-| ---------- | ---------- | ------------------------------------- | ------- |
-| 2025-11-23 | Foundation | Initialized Memory Bank               | Renchey |
-| 2025-11-23 | Foundation | Updated Git Strategy (Tiered Reviews) | Renchey |
-| 2025-11-23 | Foundation | Prototyped Python MCP Server          | Renchey |
+| Date       | Phase      | Change                                 | Author  |
+| ---------- | ---------- | -------------------------------------- | ------- |
+| 2025-11-23 | Foundation | Applied Branch Protection to All Repos | Renchey |
+| 2025-11-23 | Foundation | Created GitHub Repo & Pushed v1.0.0    | Renchey |
+| 2025-11-23 | Foundation | Prototyped Python MCP Server           | Renchey |
+| 2025-11-23 | Foundation | Updated Git Strategy (Tiered Reviews)  | Renchey |
+| 2025-11-23 | Foundation | Initialized Memory Bank                | Renchey |

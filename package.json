@@ -1,0 +1,20 @@
+{
+  "name": "org-governance-automation",
+  "version": "1.0.0",
+  "description": "Automation scripts for Mallow-Dev governance",
+  "type": "module",
+  "scripts": {
+    "sync:protection": "tsx scripts/sync-branch-protection.ts"
+  },
+  "dependencies": {
+    "@octokit/rest": "^20.0.0",
+    "dotenv": "^16.3.1",
+    "yaml": "^2.3.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.3.2"
+  }
+}
