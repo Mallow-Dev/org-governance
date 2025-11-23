@@ -87,24 +87,23 @@ Response: <type>(<scope>): <description>
 
 ## MCP Server Implementation
 
-### Technology Options
+### Technology Stack: Python (FastAPI + LangChain)
 
-1. **Python-based MCP Server**
+We have selected **Python** as the implementation language for the MCP server to enable advanced intelligence features.
 
-   - Uses `mcp` Python package
-   - Reads markdown/YAML files
-   - Provides REST API or stdio interface
+**Stack Components**:
 
-2. **Node.js MCP Server**
+- **Server**: FastAPI (high performance, easy async)
+- **MCP SDK**: `mcp` Python package
+- **Intelligence**: LangChain (orchestration)
+- **Search**: Vector embeddings (ChromaDB/FAISS) for semantic search
+- **LLM Integration**: OpenAI/Anthropic via LangChain
 
-   - Uses `@modelcontextprotocol/sdk`
-   - File system watcher for auto-reload
-   - WebSocket support for real-time updates
+**Why Python?**
 
-3. **Go-based MCP Server**
-   - High performance
-   - Single binary deployment
-   - Built-in caching
+- Native support for AI/ML libraries
+- Rich ecosystem for document parsing (Unstructured, PyPDF)
+- Easy integration with vector stores
 
 ### Required Capabilities
 
@@ -221,31 +220,25 @@ npm start
 
 ## Future Enhancements
 
-### Phase 1: Basic MCP Server (Current)
+### Phase 1: Foundation (Weeks 1-2)
 
-- File system reader
-- Markdown parser
-- Basic query interface
+- Basic Python MCP Server
+- File system reader (Markdown/YAML)
+- Simple query interface
+- GitHub Actions integration
 
-### Phase 2: Enhanced Queries
+### Phase 2: Intelligence & Search (Weeks 3-5)
 
-- Semantic search (vector embeddings)
-- Natural language queries
-- Historical version access
-- Diff between versions
+- Semantic search implementation (Embeddings)
+- Vector store integration
+- Natural language query processing ("How do I...?")
 
-### Phase 3: Write Capabilities
+### Phase 3: Advanced Capabilities (Weeks 6-8)
 
-- Propose policy changes via MCP
-- Auto-generate compliance reports
-- Update docs based on feedback
-
-### Phase 4: Intelligence Layer
-
-- Learn from usage patterns
-- Suggest policy improvements
-- Detect conflicting rules
-- Auto-update based on best practices
+- Compliance validation logic
+- Proactive recommendations
+- Automated report generation
+- Full "Intelligence Layer" maturity
 
 ## Metrics and Monitoring
 
@@ -262,10 +255,25 @@ Track:
 
 ### For Agent Developers
 
-1. Install MCP client library
-2. Connect to MCP server endpoint
-3. Query governance resources
-4. Use in agent context
+1. **Setup Environment**:
+
+   ```bash
+   cd mcp-server
+   ./setup.sh
+   source .venv/bin/activate
+   ```
+
+2. **Run Server**:
+
+   ```bash
+   python src/server.py
+   ```
+
+3. **Connect Client**:
+   ```python
+   from mcp import Client
+   # ...
+   ```
 
 ```python
 from mcp import Client

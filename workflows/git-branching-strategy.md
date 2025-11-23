@@ -1,6 +1,7 @@
 # Git Workflow & Branch Strategy
 
 ## Overview
+
 This document defines the git branching strategy and workflow standards for all repositories. **Branch structure and repository hygiene are HIGH PRIORITY.**
 
 ## Branch Structure
@@ -8,6 +9,7 @@ This document defines the git branching strategy and workflow standards for all 
 ### Protected Branches (Constants)
 
 #### `main` Branch
+
 - **Purpose**: Production-ready code only
 - **Protection**: Fully protected, no direct commits
 - **Source**: Releases come from `main` branch ONLY
@@ -16,7 +18,8 @@ This document defines the git branching strategy and workflow standards for all 
 - **CI/CD**: Triggers production deployments
 - **Tags**: All release tags (v1.0.0, v1.1.0, etc.) are created on `main`
 
-#### `development` Branch  
+#### `development` Branch
+
 - **Purpose**: Integration branch for features and hotfixes
 - **Protection**: Protected, no direct commits (hard rule!)
 - **Source**: Features, hotfixes, and bugfixes merge here first
@@ -28,6 +31,7 @@ This document defines the git branching strategy and workflow standards for all 
 ### Working Branches
 
 #### Feature Branches
+
 **Pattern**: `feature/<descriptive-name>`
 
 - **Purpose**: Individual features or enhancements
@@ -40,6 +44,7 @@ This document defines the git branching strategy and workflow standards for all 
   - `feature/dashboard-redesign`
 
 **Process**:
+
 1. Branch from `development`
 2. Work on feature
 3. Create PR to `development`
@@ -48,6 +53,7 @@ This document defines the git branching strategy and workflow standards for all 
 6. Delete feature branch
 
 #### Feature Group Branches
+
 **Pattern**: `feature-group/<group-name>` or `epic/<epic-name>`
 
 - **Purpose**: Large features composed of multiple smaller features
@@ -60,6 +66,7 @@ This document defines the git branching strategy and workflow standards for all 
   - `feature-group/api-v2`
 
 **Process**:
+
 1. Create feature group branch from `development`
 2. Create individual feature branches from the feature group
 3. Merge individual features to feature group via PR
@@ -67,11 +74,12 @@ This document defines the git branching strategy and workflow standards for all 
 5. Delete all related branches
 
 #### Hotfix Branches
+
 **Pattern**: `hotfix/<issue-description>`
 
 - **Purpose**: Critical bug fixes that need immediate attention
 - **Branched From**: `development` (for testing) OR `main` (for emergency production fixes)
-- **Merged To**: 
+- **Merged To**:
   - `development` first (for quick testing)
   - Then to `main` (for production release)
 - **Lifetime**: Very short (delete immediately after merge)
@@ -81,6 +89,7 @@ This document defines the git branching strategy and workflow standards for all 
   - `hotfix/login-crash`
 
 **Process**:
+
 1. Branch from `development` (or `main` if emergency)
 2. Fix the issue
 3. Test thoroughly
@@ -90,6 +99,7 @@ This document defines the git branching strategy and workflow standards for all 
 7. Delete hotfix branch
 
 #### Bugfix Branches
+
 **Pattern**: `fix/<bug-description>` or `bugfix/<bug-description>`
 
 - **Purpose**: Non-critical bug fixes
@@ -102,6 +112,7 @@ This document defines the git branching strategy and workflow standards for all 
   - `fix/api-response-validation`
 
 #### Chore/Maintenance Branches
+
 **Pattern**: `chore/<description>` or `docs/<description>`
 
 - **Purpose**: Non-feature work (dependencies, docs, refactoring)
@@ -132,6 +143,7 @@ main (production) ←──────────── development (staging/i
 ## Release Process
 
 ### Standard Release (from development → main)
+
 1. Ensure `development` branch is stable and tested
 2. Create PR from `development` → `main`
 3. Perform final review and testing
@@ -142,6 +154,7 @@ main (production) ←──────────── development (staging/i
 8. Create release notes on GitHub
 
 ### Hotfix Release (emergency)
+
 1. Branch from `main`: `git checkout -b hotfix/critical-fix main`
 2. Fix the issue
 3. PR to `development` for testing
@@ -153,18 +166,28 @@ main (production) ←──────────── development (staging/i
 ## Pull Request Standards
 
 ### Required Elements
+
 - **Title**: Follow conventional commits format
   - `feat: add user authentication`
   - `fix: resolve payment gateway error`
   - `chore: update dependencies`
   - `docs: add API documentation`
 - **Description**: Clear explanation of changes
-- **Reviews**: Minimum 1 approval required
+- **Reviews**: Tiered by Target Branch
+  - **Target `development`**:
+    - Minimum 1 approval required.
+    - Can be a Peer OR an AI Agent.
+    - Focus: Speed and unblocking.
+  - **Target `main` (Releases)**:
+    - 3-way voting system (All 3 core devs).
+    - Senior Dev (Tech Lead) has tie-breaking vote.
+    - Focus: Production safety.
 - **CI/CD**: All checks must pass
 - **Conflicts**: Must be resolved before merge
 - **Base Branch**: Must target correct branch (typically `development`)
 
 ### Merge Strategies
+
 - **Feature branches → development**: Squash and merge (clean history)
 - **Development → main**: Merge commit (preserve release history)
 - **Hotfix → main**: Merge commit (traceability)
@@ -172,6 +195,7 @@ main (production) ←──────────── development (staging/i
 ## Repository Hygiene Rules
 
 ### HARD RULES (Never Break)
+
 1. ✋ **Never commit directly to `main`** - All changes via PR
 2. ✋ **Never commit directly to `development`** - All changes via PR
 3. ✋ **Never force push to protected branches** - Causes history loss
@@ -179,6 +203,7 @@ main (production) ←──────────── development (staging/i
 5. ✋ **Always delete branches after merge** - Keep repo clean
 
 ### Best Practices
+
 - ✅ Keep branches focused and short-lived
 - ✅ Sync with `development` regularly (`git pull origin development`)
 - ✅ Write clear commit messages
@@ -190,6 +215,7 @@ main (production) ←──────────── development (staging/i
 - ✅ Link PRs to issues/tickets
 
 ### Branch Cleanup
+
 ```bash
 # List merged branches
 git branch --merged development
@@ -209,6 +235,7 @@ git fetch --prune
 ### Current Workflow Rating: 8.5/10 ⭐⭐⭐⭐
 
 **Strengths**:
+
 - ✅ Clear separation between production (`main`) and integration (`development`)
 - ✅ Feature grouping strategy for large features
 - ✅ Hotfix process allows quick testing before production
@@ -216,16 +243,19 @@ git fetch --prune
 
 **Suggested Improvements**:
 
-#### 1. **Release Branches** (Optional for larger teams)
-Consider adding release branches for preparation:
-- Pattern: `release/v1.x.x`
-- Branch from `development` when ready for release
-- Only bug fixes allowed
-- Merge to both `main` and back to `development`
-- Allows continued development while preparing release
+#### 1. **Release Strategy** ("Ready then Release")
+
+- **Philosophy**: `development` should always be stable.
+- **Process**:
+  1. Features merge to `development`.
+  2. When a milestone is reached or sufficient value is added, a release is cut.
+  3. No long-lived release branches unless maintaining multiple major versions.
+  4. Tag `main` and deploy.
 
 #### 2. **Branch Protection Rules**
+
 Enable on GitHub:
+
 - Require PR reviews (minimum 1-2)
 - Require status checks to pass
 - Require branches to be up to date before merging
@@ -233,21 +263,26 @@ Enable on GitHub:
 - Lock branch against deletion
 
 #### 3. **Automated Branch Cleanup**
+
 - GitHub Action to auto-delete merged branches
 - Periodic cleanup of stale branches (>30 days inactive)
 
 #### 4. **Commit Standards Enforcement**
+
 - Pre-commit hooks for commit message format
 - Conventional commits enforcement (`feat:`, `fix:`, etc.)
 - Commitlint or similar tool
 
 #### 5. **Changelog Automation**
+
 - Auto-generate changelogs from commit messages
 - Release notes automation from PR descriptions
 - Semantic versioning based on conventional commits
 
 #### 6. **Development Environment Branches** (Optional)
+
 For testing specific integrations:
+
 - `integration/*` - For testing external service integrations
 - `experiment/*` - For experimental features (not merged)
 
@@ -285,17 +320,17 @@ git checkout -b hotfix/critical-bug
 
 ## Naming Convention Reference
 
-| Type | Pattern | Example |
-|------|---------|---------|
-| Feature | `feature/<name>` | `feature/user-notifications` |
+| Type          | Pattern                                 | Example                        |
+| ------------- | --------------------------------------- | ------------------------------ |
+| Feature       | `feature/<name>`                        | `feature/user-notifications`   |
 | Feature Group | `feature-group/<name>` or `epic/<name>` | `feature-group/payment-system` |
-| Bugfix | `fix/<name>` or `bugfix/<name>` | `fix/login-validation` |
-| Hotfix | `hotfix/<name>` | `hotfix/security-patch` |
-| Chore | `chore/<name>` | `chore/upgrade-node` |
-| Documentation | `docs/<name>` | `docs/api-reference` |
-| Refactor | `refactor/<name>` | `refactor/auth-module` |
-| Performance | `perf/<name>` | `perf/database-queries` |
-| Test | `test/<name>` | `test/add-unit-tests` |
+| Bugfix        | `fix/<name>` or `bugfix/<name>`         | `fix/login-validation`         |
+| Hotfix        | `hotfix/<name>`                         | `hotfix/security-patch`        |
+| Chore         | `chore/<name>`                          | `chore/upgrade-node`           |
+| Documentation | `docs/<name>`                           | `docs/api-reference`           |
+| Refactor      | `refactor/<name>`                       | `refactor/auth-module`         |
+| Performance   | `perf/<name>`                           | `perf/database-queries`        |
+| Test          | `test/<name>`                           | `test/add-unit-tests`          |
 
 ---
 
