@@ -1,0 +1,38 @@
+name: Standard Build & Test
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        type: string
+        default: "20"
+      build-command:
+        required: false
+        type: string
+        default: "npm run build"
+      test-command:
+        required: false
+        type: string
+        default: "npm test"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Tests
+        run: ${{ inputs.test-command }}
+
+      - name: Build
+        run: ${{ inputs.build-command }}

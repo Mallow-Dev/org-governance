@@ -20,6 +20,14 @@ Thumbs.db
 .env
 .env.local
 
+# Python
+*.pyc
+__pycache__/
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
 # Build artifacts (if any automation is added later)
 dist/
 build/

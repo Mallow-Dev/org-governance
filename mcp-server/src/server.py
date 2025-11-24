@@ -1,13 +1,8 @@
-from mcp.server.fastapi import FcpServer
-from fastapi import FastAPI
-import uvicorn
+from mcp.server.fastmcp import FastMCP
 import os
 
-# Initialize FastAPI app
-app = FastAPI(title="Governance MCP Server")
-
 # Initialize MCP Server
-mcp = FcpServer(name="governance-mcp")
+mcp = FastMCP("governance-mcp")
 
 @mcp.resource("governance://{category}/{document}")
 async def read_governance_doc(category: str, document: str) -> str:
@@ -41,8 +36,5 @@ async def list_governance_docs() -> list[str]:
                     docs.append(f"governance://{category}/{file.replace('.md', '')}")
     return docs
 
-# Mount MCP to FastAPI
-app.include_router(mcp.router)
-
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    mcp.run()
