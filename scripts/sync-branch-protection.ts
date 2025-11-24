@@ -39,24 +39,24 @@ async function main() {
     try {
       const protectionRules = settings.branches?.main?.protection;
       if (!protectionRules) {
-        console.warn(`⚠️  No protection rules found for 'main' in YAML.`);
-        continue;
+        console.warn(`⚠️  ${repo.name}: No protection rules found for 'main' in YAML.`);
+        // Skip protection for this branch, but continue processing repository
+      } else {
+        await octokit.repos.updateBranchProtection({
+          owner: ORG_NAME,
+          repo: repo.name,
+          branch: "main",
+          ...protectionRules,
+        });
+        console.log(`✅ ${repo.name}: Protected 'main'`);
       }
-
-      await octokit.repos.updateBranchProtection({
-        owner: ORG_NAME,
-        repo: repo.name,
-        branch: "main",
-        ...protectionRules,
-      });
-      console.log(`✅ ${repo.name}: Protected 'main'`);
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error(`❌ ${repo.name}: Failed to protect 'main'`, error.message);
       } else {
         console.error(`❌ ${repo.name}: Failed to protect 'main'`, error);
       }
-  }
+    }
 }
 
 main().catch(console.error);
