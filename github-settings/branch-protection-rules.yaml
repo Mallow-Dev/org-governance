@@ -14,7 +14,7 @@ branches:
         required_approving_review_count: 2
         dismiss_stale_reviews: true
         require_code_owner_reviews: true
-        require_last_push_approval: false
+        require_last_push_approval: false # CHANGED: Allow self-approval for small team
 
       # Required status checks
       required_status_checks:
@@ -26,7 +26,7 @@ branches:
             app_id: null
 
       # Restrictions
-      enforce_admins: true # Rules apply to admins too
+      enforce_admins: false # CHANGED: Allow senior developers to override
       restrictions: null # No push restrictions
 
       # Other settings
