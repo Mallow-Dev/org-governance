@@ -80,6 +80,19 @@ async def reindex_governance() -> str:
     except Exception as e:
         return f"Failed to re-index: {str(e)}"
 
+# Initialize Reporting
+from .reporting import ComplianceReporter, get_mock_compliance_data
+reporter = ComplianceReporter()
+
+@mcp.tool()
+async def generate_compliance_report() -> str:
+    """
+    Generate a comprehensive compliance report for the organization.
+    Currently uses mock data for demonstration.
+    """
+    data = get_mock_compliance_data()
+    return reporter.generate_report(data)
+
 # Mount MCP to FastAPI
 app.include_router(mcp.router)
 
