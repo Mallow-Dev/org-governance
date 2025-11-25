@@ -13,7 +13,7 @@
 ### Phase 2: Intelligence & Search (Weeks 3-5) - **IN PROGRESS**
 
 - [x] Multi-Agent Memory Bank (Phases 1-3 Complete)
-- [ ] Implement Semantic Search (LangChain + Embeddings).
+- [x] Implement Semantic Search (LangChain + Embeddings).
 - [ ] Build "Premium" Compliance Dashboard.
 - [ ] Integrate MCP with first Agent.
 
@@ -35,6 +35,7 @@
 
 | Date       | Phase        | Change                                | Author  |
 | ---------- | ------------ | ------------------------------------- | ------- |
+| 2025-11-25 | Intelligence | Implemented Semantic Search (MCP)     | Agent   |
 | 2025-11-25 | Intelligence | Multi-Agent Helper Scripts Created    | Agent   |
 | 2025-11-25 | Intelligence | Memory Bank Format Standard v2.0      | Agent   |
 | 2025-11-25 | Intelligence | Multi-Agent Protocols Documented      | Agent   |
