@@ -41,6 +41,45 @@ async def list_governance_docs() -> list[str]:
                     docs.append(f"governance://{category}/{file.replace('.md', '')}")
     return docs
 
+# Initialize Semantic Search
+from .search import SemanticSearch
+search_engine = SemanticSearch(persistence_directory=os.path.join(os.path.dirname(__file__), "../chroma_db"))
+
+@mcp.tool()
+async def search_governance(query: str) -> str:
+    """
+    Perform a semantic search across all governance documentation.
+    Returns relevant snippets with source links.
+    """
+    results = search_engine.search(query)
+    
+    if not results:
+        return "No matching documents found."
+    
+    if "error" in results[0]:
+        return results[0]["error"]
+
+    response = f"### Search Results for '{query}'\n\n"
+    for item in results:
+        source = item['source'].split('/')[-1] # Simple filename
+        response += f"**Source**: {source} (Score: {item['score']:.2f})\n"
+        response += f"> {item['content']}...\n\n"
+        
+    return response
+
+@mcp.tool()
+async def reindex_governance() -> str:
+    """
+    Trigger a re-indexing of all governance documents.
+    Call this after adding or modifying documentation.
+    """
+    base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
+    try:
+        search_engine.index_documents(base_path)
+        return "Successfully re-indexed governance documents."
+    except Exception as e:
+        return f"Failed to re-index: {str(e)}"
+
 # Mount MCP to FastAPI
 app.include_router(mcp.router)
 

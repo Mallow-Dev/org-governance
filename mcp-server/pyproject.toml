@@ -9,6 +9,8 @@ dependencies = [
     "fastapi",
     "uvicorn",
     "langchain",
+    "langchain-community",
+    "langchain-openai",
     "chromadb",
     "openai",
     "tiktoken"
@@ -20,3 +22,4 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/governance_mcp"]
+                                                                                                                           
