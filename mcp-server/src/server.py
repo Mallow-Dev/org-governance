@@ -1,13 +1,10 @@
-from mcp.server.fastapi import FcpServer
+from mcp.server.fastmcp import FastMCP
 from fastapi import FastAPI
 import uvicorn
 import os
 
-# Initialize FastAPI app
-app = FastAPI(title="Governance MCP Server")
-
 # Initialize MCP Server
-mcp = FcpServer(name="governance-mcp")
+mcp = FastMCP("governance-mcp")
 
 @mcp.resource("governance://{category}/{document}")
 async def read_governance_doc(category: str, document: str) -> str:
@@ -42,7 +39,10 @@ async def list_governance_docs() -> list[str]:
     return docs
 
 # Initialize Semantic Search
-from .search import SemanticSearch
+try:
+    from search import SemanticSearch
+except ImportError:
+    from .search import SemanticSearch
 search_engine = SemanticSearch(persistence_directory=os.path.join(os.path.dirname(__file__), "../chroma_db"))
 
 @mcp.tool()
@@ -81,7 +81,10 @@ async def reindex_governance() -> str:
         return f"Failed to re-index: {str(e)}"
 
 # Initialize Reporting
-from .reporting import ComplianceReporter, get_mock_compliance_data
+try:
+    from reporting import ComplianceReporter, get_mock_compliance_data
+except ImportError:
+    from .reporting import ComplianceReporter, get_mock_compliance_data
 reporter = ComplianceReporter()
 
 @mcp.tool()
@@ -94,7 +97,10 @@ async def generate_compliance_report() -> str:
     return reporter.generate_report(data)
 
 # Initialize Recommendations
-from .recommendations import PolicyRecommender
+try:
+    from recommendations import PolicyRecommender
+except ImportError:
+    from .recommendations import PolicyRecommender
 recommender = PolicyRecommender()
 
 @mcp.tool()
@@ -120,8 +126,5 @@ async def analyze_violation_trends(violations: list[str]) -> str:
     """
     return await recommender.analyze_violations(violations)
 
-# Mount MCP to FastAPI
-app.include_router(mcp.router)
-
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    mcp.run()

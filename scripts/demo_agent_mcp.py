@@ -1,9 +1,10 @@
 import asyncio
 import sys
+import os
 
 # Ensure mcp is installed or run with the mcp-server venv
 try:
-    from mcp.client.sse import sse_client
+    from mcp.client.stdio import stdio_client, StdioServerParameters
     from mcp.client.session import ClientSession
 except ImportError:
     print("Error: 'mcp' package not found. Please run this script using the mcp-server virtual environment:")
@@ -11,13 +12,22 @@ except ImportError:
     sys.exit(1)
 
 async def run_agent_demo():
-    print("🤖 Agent: Connecting to Governance MCP Server...")
+    print("🤖 Agent: Connecting to Governance MCP Server (Stdio)...")
     
-    # Connect to the server (assuming it's running on port 8000)
-    # Note: The endpoint might be /sse or similar depending on FcpServer default
+    # Define server parameters
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    server_script = os.path.join(repo_root, "mcp-server/src/server.py")
+    python_exe = sys.executable # Use current python (assuming running in venv)
+    
+    server_params = StdioServerParameters(
+        command=python_exe,
+        args=[server_script],
+        env=os.environ.copy()
+    )
+    
     try:
-        async with sse_client("http://localhost:8000/sse") as streams:
-            async with ClientSession(streams.read, streams.write) as session:
+        async with stdio_client(server_params) as (read, write):
+            async with ClientSession(read, write) as session:
                 await session.initialize()
                 
                 print("✅ Agent: Connected!")
