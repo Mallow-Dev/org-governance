@@ -93,6 +93,33 @@ async def generate_compliance_report() -> str:
     data = get_mock_compliance_data()
     return reporter.generate_report(data)
 
+# Initialize Recommendations
+from .recommendations import PolicyRecommender
+recommender = PolicyRecommender()
+
+@mcp.tool()
+async def suggest_policy_updates(category: str, document: str) -> str:
+    """
+    Suggest updates for a specific policy document using AI.
+    Reads the document and generates recommendations.
+    """
+    # Reuse read_governance_doc logic
+    try:
+        content = await read_governance_doc(category, document)
+        if content.startswith("Document not found"):
+            return content
+            
+        return await recommender.suggest_updates(content, context=f"Reviewing {document}")
+    except Exception as e:
+        return f"Error: {e}"
+
+@mcp.tool()
+async def analyze_violation_trends(violations: list[str]) -> str:
+    """
+    Analyze a list of violations to suggest systemic policy changes.
+    """
+    return await recommender.analyze_violations(violations)
+
 # Mount MCP to FastAPI
 app.include_router(mcp.router)
 
