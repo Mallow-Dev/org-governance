@@ -11,13 +11,18 @@ const SETTINGS_FILE = "github-settings/branch-protection-rules.yaml";
 const ORG_NAME = "Mallow-Dev";
 
 function protectionRulesForRepository(repoName: string, settings: any) {
-  for (const classSettings of Object.values(settings.repository_classes ?? {})) {
-    const prefix = (classSettings as any)?.name_prefix;
-    if (typeof prefix === "string" && repoName.startsWith(prefix)) {
-      return (classSettings as any)?.branches?.main?.protection;
-    }
-  }
-  return settings.branches?.main?.protection;
+  const defaultProtection = settings.branches?.main?.protection;
+  const matchingClasses = Object.values(settings.repository_classes ?? {})
+    .filter((classSettings: any) => {
+      const prefix = classSettings?.name_prefix;
+      return typeof prefix === "string" && repoName.startsWith(prefix);
+    })
+    .sort(
+      (left: any, right: any) =>
+        right.name_prefix.length - left.name_prefix.length,
+    );
+
+  return matchingClasses[0]?.branches?.main?.protection ?? defaultProtection;
 }
 
 async function main() {
