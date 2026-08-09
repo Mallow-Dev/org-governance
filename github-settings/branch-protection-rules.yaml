@@ -66,6 +66,35 @@ branches:
       lock_branch: false
       allow_fork_syncing: true
 
+# Repository classes
+# Repositories beginning with exactly 'agent-plugin-' use this lightweight class.
+# Runtime repositories such as 'agent-*' remain on the default application rules.
+repository_classes:
+  agent-plugin:
+    name_prefix: "agent-plugin-"
+    description: "Lightweight Codex plugin and embedded-skill repositories"
+    branches:
+      main:
+        protection:
+          required_pull_request_reviews:
+            required_approving_review_count: 1
+            dismiss_stale_reviews: true
+            require_code_owner_reviews: false
+            require_last_push_approval: false
+          required_status_checks:
+            strict: true
+            checks:
+              - context: "plugin-validation"
+                app_id: null
+          enforce_admins: true
+          restrictions: null
+          required_linear_history: false
+          allow_force_pushes: false
+          allow_deletions: false
+          required_conversation_resolution: true
+          lock_branch: false
+          allow_fork_syncing: true
+
 # Repository-Specific Overrides
 
 # Critical Production Repositories
