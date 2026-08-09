@@ -10,6 +10,16 @@ const GOVERNANCE_REPO = "Mallow-Dev/org-governance";
 const SETTINGS_FILE = "github-settings/branch-protection-rules.yaml";
 const ORG_NAME = "Mallow-Dev";
 
+function protectionRulesForRepository(repoName: string, settings: any) {
+  for (const classSettings of Object.values(settings.repository_classes ?? {})) {
+    const prefix = (classSettings as any)?.name_prefix;
+    if (typeof prefix === "string" && repoName.startsWith(prefix)) {
+      return (classSettings as any)?.branches?.main?.protection;
+    }
+  }
+  return settings.branches?.main?.protection;
+}
+
 async function main() {
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
@@ -37,7 +47,7 @@ async function main() {
 
     // Apply to 'main' branch
     try {
-      const protectionRules = settings.branches?.main?.protection;
+      const protectionRules = protectionRulesForRepository(repo.name, settings);
       if (!protectionRules) {
         console.warn(`⚠️  ${repo.name}: No protection rules found for 'main' in YAML.`);
         // Skip protection for this branch, but continue processing repository
