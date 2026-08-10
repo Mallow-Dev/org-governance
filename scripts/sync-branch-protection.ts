@@ -2,6 +2,7 @@ import { Octokit } from "@octokit/rest";
 import { parse } from "yaml";
 import { readFileSync } from "fs";
 import * as dotenv from "dotenv";
+import { protectionRulesForRepository } from "./protection-rules.js";
 
 dotenv.config();
 
@@ -37,7 +38,7 @@ async function main() {
 
     // Apply to 'main' branch
     try {
-      const protectionRules = settings.branches?.main?.protection;
+      const protectionRules = protectionRulesForRepository(repo.name, settings);
       if (!protectionRules) {
         console.warn(`⚠️  ${repo.name}: No protection rules found for 'main' in YAML.`);
         // Skip protection for this branch, but continue processing repository
@@ -57,6 +58,7 @@ async function main() {
         console.error(`❌ ${repo.name}: Failed to protect 'main'`, error);
       }
     }
+  }
 }
 
 main().catch(console.error);
