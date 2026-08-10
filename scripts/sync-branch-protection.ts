@@ -2,6 +2,7 @@ import { Octokit } from "@octokit/rest";
 import { parse } from "yaml";
 import { readFileSync } from "fs";
 import * as dotenv from "dotenv";
+import { protectionRulesForRepository } from "./protection-rules.js";
 
 dotenv.config();
 
@@ -9,21 +10,6 @@ dotenv.config();
 const GOVERNANCE_REPO = "Mallow-Dev/org-governance";
 const SETTINGS_FILE = "github-settings/branch-protection-rules.yaml";
 const ORG_NAME = "Mallow-Dev";
-
-function protectionRulesForRepository(repoName: string, settings: any) {
-  const defaultProtection = settings.branches?.main?.protection;
-  const matchingClasses = Object.values(settings.repository_classes ?? {})
-    .filter((classSettings: any) => {
-      const prefix = classSettings?.name_prefix;
-      return typeof prefix === "string" && repoName.startsWith(prefix);
-    })
-    .sort(
-      (left: any, right: any) =>
-        right.name_prefix.length - left.name_prefix.length,
-    );
-
-  return matchingClasses[0]?.branches?.main?.protection ?? defaultProtection;
-}
 
 async function main() {
   const token = process.env.GITHUB_TOKEN;
@@ -72,6 +58,7 @@ async function main() {
         console.error(`❌ ${repo.name}: Failed to protect 'main'`, error);
       }
     }
+  }
 }
 
 main().catch(console.error);
