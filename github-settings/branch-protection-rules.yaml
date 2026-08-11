@@ -95,6 +95,43 @@ repository_classes:
           lock_branch: false
           allow_fork_syncing: true
 
+# Repository custom-property lanes
+# GitHub organization rulesets target this property instead of repository names.
+repository_properties:
+  governance_lane:
+    value_type: single_select
+    description: "Controls the development-branch governance profile; production branches remain standard."
+    allowed_values:
+      - standard
+      - speedy
+    default_value: standard
+    required: true
+    values_editable_by: org_actors
+
+# The speedy lane removes only the approval count from development merges.
+# PRs, review-thread resolution, signed commits, linear history, deletion and
+# force-push protection, required checks, and production/release rules remain.
+ruleset_profiles:
+  speedy-development:
+    repository_property:
+      name: governance_lane
+      values:
+        - speedy
+    branches:
+      include:
+        - refs/heads/develop
+        - refs/heads/development
+    required_approving_review_count: 0
+    required_review_thread_resolution: true
+    required_status_checks:
+      - "Fast PR Gate"
+    preserve:
+      - required_signed_commits
+      - required_linear_history
+      - deletion_protection
+      - force_push_protection
+      - pull_request_required
+
 # Repository-Specific Overrides
 
 # Critical Production Repositories

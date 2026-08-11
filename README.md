@@ -52,11 +52,15 @@ org-governance/
 - [Security Policy](policies/security-policy.md)
 - [Contribution Guidelines](policies/contribution-guidelines.md)
 
-## Repository classes
+## Repository classes and governance lanes
 
 The default branch-protection rules apply to normal product and runtime repositories. The only lightweight exemption is the exact repository-name prefix **agent-plugin-**. It keeps pull requests, one approval, admin enforcement, conversation resolution, no force-pushes, and no branch deletion, while requiring the repository's **plugin-validation** check instead of the default two approvals, CODEOWNER review, application CI, and security-scan checks. Repositories beginning with **agent-** but not **agent-plugin-** remain on the normal rules.
 
 The live synchronizer in `scripts/sync-branch-protection.ts` selects this class by the exact prefix and applies the matching `main` rules.
+
+Development-only acceleration uses the organization custom property `governance_lane`, not repository renaming or topics. The property is a required single-select value with `standard` as the default and `speedy` as the explicit opt-in. A speedy repository still requires pull requests, automated review, required checks, resolved conversations, signed commits, linear history, deletion protection, and force-push protection; it removes only the approval-count requirement on `develop`/`development`. `main`, `master`, and `release/*` remain on the standard production rules.
+
+The declarative property and speedy-development profile live in [`github-settings/branch-protection-rules.yaml`](github-settings/branch-protection-rules.yaml), with resolver tests in [`tests/protection-rules.test.ts`](tests/protection-rules.test.ts) and [`scripts/ruleset-policies.ts`](scripts/ruleset-policies.ts). The live organization ruleset must be read back after every change.
 
 ## Usage
 
