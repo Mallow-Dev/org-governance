@@ -56,7 +56,7 @@ org-governance/
 
 The default branch-protection rules apply to normal product and runtime repositories. The only lightweight exemption is the exact repository-name prefix **agent-plugin-**. It keeps pull requests, one approval, admin enforcement, conversation resolution, no force-pushes, and no branch deletion, while requiring the repository's **plugin-validation** check instead of the default two approvals, CODEOWNER review, application CI, and security-scan checks. Repositories beginning with **agent-** but not **agent-plugin-** remain on the normal rules.
 
-The live synchronizer in `scripts/sync-branch-protection.ts` selects this class by the exact prefix and applies the matching `main` rules.
+The live synchronizer in `scripts/sync-branch-protection.ts` selects this class by the exact prefix for repository `main` protection and now also upserts the `governance_lane` property plus the development-lane org rulesets that opt speedy repositories out of the default one-approval path.
 
 Development-only acceleration uses the organization custom property `governance_lane`, not repository renaming or topics. The property is a required single-select value with `standard` as the default and `speedy` as the explicit opt-in. A speedy repository still requires pull requests, automated review, required checks, resolved conversations, signed commits, linear history, deletion protection, and force-push protection; it removes only the approval-count requirement on `develop`/`development`. `main`, `master`, and `release/*` remain on the standard production rules.
 
