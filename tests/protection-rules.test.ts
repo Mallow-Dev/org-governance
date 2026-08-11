@@ -92,7 +92,7 @@ test("speedy lane is an explicit, controlled development-only property", () => {
         },
         required_approving_review_count: 0,
         required_review_thread_resolution: true,
-        required_status_checks: ["Fast PR Gate"],
+        required_status_checks: ["Fast PR Gate", "Review Gate"],
         preserve: [
           "required_signed_commits",
           "required_linear_history",

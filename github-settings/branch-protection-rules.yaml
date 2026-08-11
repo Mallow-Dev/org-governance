@@ -125,6 +125,7 @@ ruleset_profiles:
     required_review_thread_resolution: true
     required_status_checks:
       - "Fast PR Gate"
+      - "Review Gate"
     preserve:
       - required_signed_commits
       - required_linear_history
