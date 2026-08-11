@@ -1,11 +1,31 @@
-export interface RepositoryPropertyDefinition {
-  value_type: "single_select" | "string" | "boolean" | "multi_select";
+export type PropertyValuesEditableBy = "org_actors" | "org_and_repo_actors";
+
+interface RepositoryPropertyDefinitionBase {
   description: string;
+  required: boolean;
+  values_editable_by: PropertyValuesEditableBy;
+}
+
+interface SelectPropertyDefinition extends RepositoryPropertyDefinitionBase {
+  value_type: "single_select" | "multi_select";
   allowed_values: string[];
   default_value: string;
-  required: boolean;
-  values_editable_by: "org_actors" | "org_and_repo_actors";
 }
+
+interface StringPropertyDefinition extends RepositoryPropertyDefinitionBase {
+  value_type: "string";
+  default_value?: string;
+}
+
+interface BooleanPropertyDefinition extends RepositoryPropertyDefinitionBase {
+  value_type: "boolean";
+  default_value?: "true" | "false";
+}
+
+export type RepositoryPropertyDefinition =
+  | SelectPropertyDefinition
+  | StringPropertyDefinition
+  | BooleanPropertyDefinition;
 
 export interface BranchProtectionReviewSettings {
   required_approving_review_count?: number;
@@ -113,15 +133,27 @@ export interface OrganizationBranchRulesetRequest {
   rules: RulesetRule[];
 }
 
-export interface OrganizationPropertySchema {
+type PropertySchemaBase = {
   property_name: string;
-  value_type: RepositoryPropertyDefinition["value_type"];
   description: string;
-  allowed_values: string[];
-  default_value: string;
   required: boolean;
-  values_editable_by: RepositoryPropertyDefinition["values_editable_by"];
-}
+  values_editable_by: PropertyValuesEditableBy;
+};
+
+export type OrganizationPropertySchema =
+  | (PropertySchemaBase & {
+      value_type: "single_select" | "multi_select";
+      allowed_values: string[];
+      default_value: string;
+    })
+  | (PropertySchemaBase & {
+      value_type: "string";
+      default_value?: string;
+    })
+  | (PropertySchemaBase & {
+      value_type: "boolean";
+      default_value?: "true" | "false";
+    });
 
 export const GOVERNANCE_LANE_PROPERTY_NAME = "governance_lane";
 export const SPEEDY_DEVELOPMENT_RULESET_NAME = "speedy-development";
@@ -152,14 +184,26 @@ export function governanceLanePropertySchema(
     return undefined;
   }
 
-  return {
+  const base = {
     property_name: GOVERNANCE_LANE_PROPERTY_NAME,
-    value_type: definition.value_type,
     description: definition.description,
-    allowed_values: definition.allowed_values,
-    default_value: definition.default_value,
     required: definition.required,
     values_editable_by: definition.values_editable_by,
+  };
+
+  if (definition.value_type === "single_select" || definition.value_type === "multi_select") {
+    return {
+      ...base,
+      value_type: definition.value_type,
+      allowed_values: definition.allowed_values,
+      default_value: definition.default_value,
+    };
+  }
+
+  return {
+    ...base,
+    value_type: definition.value_type,
+    ...(definition.default_value !== undefined ? { default_value: definition.default_value } : {}),
   };
 }
 
