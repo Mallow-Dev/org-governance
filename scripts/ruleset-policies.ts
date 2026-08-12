@@ -162,6 +162,7 @@ const DEFAULT_DEVELOPMENT_BRANCH_REFS = [
   "refs/heads/develop",
   "refs/heads/development",
 ];
+const DEFAULT_ALLOWED_MERGE_METHODS = ["merge", "squash", "rebase"] as const;
 const CUSTOM_PROPERTY_SOURCE = "custom" as const;
 const PRESERVED_RULE_TYPES = {
   required_signed_commits: "required_signatures",
@@ -449,10 +450,14 @@ function buildSpeedyPullRequestRule(
   existingRule: RulesetRule | undefined,
 ): RulesetRule {
   const baseReviews = developmentProtection?.required_pull_request_reviews ?? {};
+  const existingParameters = existingRule?.parameters ?? {};
   return {
     type: "pull_request",
     parameters: {
-      ...(existingRule?.parameters ?? {}),
+      ...existingParameters,
+      allowed_merge_methods:
+        normalizeMergeMethods(existingParameters.allowed_merge_methods) ??
+        [...DEFAULT_ALLOWED_MERGE_METHODS],
       required_approving_review_count: profile.required_approving_review_count,
       dismiss_stale_reviews_on_push: baseReviews.dismiss_stale_reviews ?? false,
       require_code_owner_review: baseReviews.require_code_owner_reviews ?? false,
@@ -511,4 +516,15 @@ function buildSpeedyStatusChecksRule(
       }),
     },
   };
+}
+
+function normalizeMergeMethods(value: unknown): string[] | undefined {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+
+  const mergeMethods = [
+    ...new Set(value.filter((method): method is string => typeof method === "string")),
+  ];
+  return mergeMethods.length > 0 ? mergeMethods : undefined;
 }

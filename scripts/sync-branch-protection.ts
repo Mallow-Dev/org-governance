@@ -146,6 +146,34 @@ async function listOrganizationBranchRulesets(
     },
   );
 
+  const rulesets: OrganizationBranchRuleset[] = [];
+
+  // The list endpoint returns summaries, so hydrate each ruleset before any policy checks.
+  for (const ruleset of response.data) {
+    if (!ruleset.id) {
+      rulesets.push(ruleset);
+      continue;
+    }
+
+    rulesets.push(await getOrganizationBranchRuleset(octokit, org, ruleset.id));
+  }
+
+  return rulesets;
+}
+
+async function getOrganizationBranchRuleset(
+  octokit: OctokitLike,
+  org: string,
+  rulesetId: number,
+): Promise<OrganizationBranchRuleset> {
+  const response = await octokit.request<OrganizationBranchRuleset>(
+    "GET /orgs/{org}/rulesets/{ruleset_id}",
+    {
+      org,
+      ruleset_id: rulesetId,
+    },
+  );
+
   return response.data;
 }
 

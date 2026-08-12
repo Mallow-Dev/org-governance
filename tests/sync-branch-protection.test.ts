@@ -152,6 +152,22 @@ test("speedy ruleset payload preserves existing extras while enforcing zero appr
   );
 });
 
+test("speedy ruleset payload is API-valid on first creation", () => {
+  const payload = speedyDevelopmentRulesetPayload(speedyLaneSettings);
+
+  assert.deepEqual(
+    payload?.rules.find((rule) => rule.type === "pull_request")?.parameters,
+    {
+      allowed_merge_methods: ["merge", "squash", "rebase"],
+      required_approving_review_count: 0,
+      dismiss_stale_reviews_on_push: true,
+      require_code_owner_review: false,
+      require_last_push_approval: false,
+      required_review_thread_resolution: true,
+    },
+  );
+});
+
 test("standard development rulesets can exclude speedy repositories", () => {
   const payload = developmentRulesetWithSpeedyExclusion(
     {
@@ -185,29 +201,40 @@ test("standard development rulesets can exclude speedy repositories", () => {
   ]);
 });
 
-test("organization policy sync upserts the property, speedy ruleset, and lane-aware exclusion", async () => {
+test("organization policy sync hydrates listed rulesets before applying lane-aware exclusion", async () => {
   const requests: Array<{ route: string; params: Record<string, unknown> }> = [];
-  const existingRulesets: OrganizationBranchRuleset[] = [
+  const listedRulesets: OrganizationBranchRuleset[] = [
     {
       id: 13729613,
       name: "orglevel-development",
       target: "branch",
       enforcement: "active",
-      bypass_actors: [],
-      conditions: {
-        ref_name: {
-          include: ["refs/heads/develop", "refs/heads/development"],
-          exclude: [],
-        },
-      },
-      rules: [
-        {
-          type: "pull_request",
-          parameters: { required_approving_review_count: 1 },
-        },
-      ],
     },
   ];
+  const fullRulesets = new Map<number, OrganizationBranchRuleset>([
+    [
+      13729613,
+      {
+        id: 13729613,
+        name: "orglevel-development",
+        target: "branch",
+        enforcement: "active",
+        bypass_actors: [],
+        conditions: {
+          ref_name: {
+            include: ["refs/heads/develop", "refs/heads/development"],
+            exclude: [],
+          },
+        },
+        rules: [
+          {
+            type: "pull_request",
+            parameters: { required_approving_review_count: 1 },
+          },
+        ],
+      },
+    ],
+  ]);
 
   const octokit = {
     repos: {
@@ -226,7 +253,16 @@ test("organization policy sync upserts the property, speedy ruleset, and lane-aw
       }
 
       if (route === "GET /orgs/{org}/rulesets") {
-        return { data: existingRulesets };
+        return { data: listedRulesets };
+      }
+
+      if (route === "GET /orgs/{org}/rulesets/{ruleset_id}") {
+        const ruleset = fullRulesets.get(params.ruleset_id as number);
+        if (!ruleset) {
+          throw new Error(`Unknown ruleset: ${params.ruleset_id}`);
+        }
+
+        return { data: ruleset };
       }
 
       if (route === "POST /orgs/{org}/rulesets") {
@@ -258,14 +294,22 @@ test("organization policy sync upserts the property, speedy ruleset, and lane-aw
     [
       "PATCH /orgs/{org}/properties/schema",
       "GET /orgs/{org}/rulesets",
+      "GET /orgs/{org}/rulesets/{ruleset_id}",
       "POST /orgs/{org}/rulesets",
       "PUT /orgs/{org}/rulesets/{ruleset_id}",
     ],
   );
 
-  assert.equal(requests[2]?.params.name, SPEEDY_DEVELOPMENT_RULESET_NAME);
+  const createRequest = requests.find(
+    (request) => request.route === "POST /orgs/{org}/rulesets",
+  );
+  const updateRequest = requests.find(
+    (request) => request.route === "PUT /orgs/{org}/rulesets/{ruleset_id}",
+  );
+
+  assert.equal(createRequest?.params.name, SPEEDY_DEVELOPMENT_RULESET_NAME);
   assert.deepEqual(
-    (requests[2]?.params.conditions as Record<string, unknown>).repository_property,
+    (createRequest?.params.conditions as Record<string, unknown>).repository_property,
     {
       include: [
         {
@@ -277,9 +321,15 @@ test("organization policy sync upserts the property, speedy ruleset, and lane-aw
       exclude: [],
     },
   );
+  assert.deepEqual(
+    (createRequest?.params.rules as Array<{ type: string; parameters?: Record<string, unknown> }>).find(
+      (rule) => rule.type === "pull_request",
+    )?.parameters?.allowed_merge_methods,
+    ["merge", "squash", "rebase"],
+  );
 
   assert.deepEqual(
-    ((requests[3]?.params.conditions as Record<string, unknown>).repository_property as Record<
+    ((updateRequest?.params.conditions as Record<string, unknown>).repository_property as Record<
       string,
       unknown
     >).exclude,
