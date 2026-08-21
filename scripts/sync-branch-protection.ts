@@ -1,4 +1,4 @@
-import { Octokit } from "@octokit/rest";
+import { Octokit } from "@octokit/rest/dist-node/index.js";
 import { readFileSync } from "fs";
 import * as dotenv from "dotenv";
 import { pathToFileURL } from "url";
