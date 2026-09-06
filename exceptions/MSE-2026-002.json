@@ -4,7 +4,7 @@
   "status": "active",
   "subject_visibility": "private",
   "standard_commit": "ceca7dc720e51103bbfc04d7954ded18909e9e03",
-  "decision_sha256": "385301718f94d78e108c923d400dfa7eaa3145f896be6dde34421a776073642b",
+  "decision_sha256": "069c4a3cf4b0f1db6ad78f044945972ffa84c0dfd0b3d37752bd5df183734f9f",
   "approval": {
     "risk_owner": "renchey",
     "required_independent_reviewers": ["MallowLiam"],
