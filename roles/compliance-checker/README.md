@@ -94,6 +94,11 @@ The Compliance Checker validates repository adherence to standards, audits confi
 - Issue creation automation
 - Compliance tracking dashboard
 
+## Branch Protection Interpretation
+
+- Treat the standard development lane as requiring at least one approval.
+- Do not report a violation when a repository with `governance_lane=speedy` requires `0` approvals on `develop`/`development`, as long as the org `speedy-development` ruleset applies and the standard development ruleset excludes speedy repositories.
+
 ## Training
 
 New agents in this role must review:

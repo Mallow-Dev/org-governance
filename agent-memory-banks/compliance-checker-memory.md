@@ -94,7 +94,8 @@ The **Compliance Checker** validates repository adherence to organizational stan
 **Development Branch**:
 
 - ✅ Require PR before merging
-- ✅ Require approvals (≥1)
+- ✅ Require approvals (≥1) on the standard lane
+- ✅ Treat `governance_lane=speedy` as compliant with `0` approvals on `develop`/`development` only when the org `speedy-development` ruleset applies and the standard development ruleset excludes speedy repositories
 - ⚠️ Optional: Status checks
 
 ### Code Marker Compliance
@@ -202,6 +203,7 @@ The **Compliance Checker** validates repository adherence to organizational stan
 - **Archived Repos**: Low priority for compliance
 - **Experimental Branches**: May have relaxed standards
 - **Third-party Forks**: External governance applies
+- **Speedy Development Repos**: `develop`/`development` may legitimately require `0` approvals when `governance_lane=speedy` and the org rulesets are lane-aware
 
 ## Best Practices
 
@@ -237,5 +239,5 @@ Document legitimate deviations from standards:
 
 ---
 
-_Last Updated_: 2025-11-24  
+_Last Updated_: 2026-08-12  
 _Memory Bank Version_: 1.0.0
