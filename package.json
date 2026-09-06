@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "sync:protection": "tsx scripts/sync-branch-protection.ts",
+    "revert:speedy": "tsx scripts/revert-speedy-governance.ts",
     "test": "tsx --test tests/*.test.ts"
   },
   "dependencies": {
