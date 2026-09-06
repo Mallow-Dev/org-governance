@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "mallow.dev/jobs/v1",
+  "id": "JOB-2026-003-ghas-remediation",
+  "title": "Remove paid GitHub security scans across Mallow-Dev",
+  "status": "complete",
+  "owner": "renchey",
+  "repository": "Mallow-Dev/org-governance",
+  "targetBranch": "main",
+  "createdAt": "2026-09-06T23:09:55.935Z",
+  "updatedAt": "2026-09-06T23:29:38.214Z",
+  "spec": {
+    "path": "SPEC.md",
+    "status": "approved",
+    "sha256": "7cac8c7567ebfc956e3ce64c1751b8c18fef2a7aece5d051b1c1b4a395332b92",
+    "approvedAt": "2026-09-06T23:10:10.441Z"
+  },
+  "execution": {
+    "currentTask": "Complete",
+    "nextAction": null,
+    "lastCheckpointSha": "a53b99e18aef02a90ee8ebd0e32feaec29bd85e5"
+  },
+  "completion": {
+    "acceptanceCriteriaTotal": 4,
+    "acceptanceCriteriaSatisfied": 4,
+    "finalReportRequired": true,
+    "closedAt": "2026-09-06T23:29:38.214Z"
+  }
+}
