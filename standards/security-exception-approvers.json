@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "status": "active",
+  "roles": {
+    "risk_owners": ["renchey"],
+    "organisation_release_approvers": ["MallowLiam"],
+    "security_approvers": ["MallowLiam"]
+  },
+  "updated_at": "2026-09-06T02:22:00Z"
+}
