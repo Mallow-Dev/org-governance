@@ -1,13 +1,15 @@
 # Organizational Governance Repository
 
-> **Single Source of Truth** for organizational standards, workflows, policies, and best practices.
+> **Governance authority** for applicability, repository classes, governance profiles, branch/governance policy, exceptions, approval boundaries, and the organisation policy index.
 
 ## Purpose
 
-This repository serves as the centralized documentation hub for all development standards, workflows, and policies across the organization. It provides:
+This repository is the organisation governance layer. Detailed normative engineering requirements live in [`Mallow-Dev/org-engineering-standards`](https://github.com/Mallow-Dev/org-engineering-standards); executable shared configuration lives in [`Mallow-Dev/standards`](https://github.com/Mallow-Dev/standards); deployment/reference tooling lives in [`Mallow-Dev/ops-deploy-standard`](https://github.com/Mallow-Dev/ops-deploy-standard).
+
+This repository provides:
 
 - ✅ **Version-controlled** standards and policies
-- ✅ **Single source of truth** for all organizational documentation
+- ✅ **Authoritative applicability and exception rules** for organisation governance
 - ✅ **Discoverable** and easily referenced guidelines
 - ✅ **Auditable** change history for compliance
 - ✅ **AI-accessible** context for agents and automation
@@ -25,6 +27,19 @@ org-governance/
 ├── github-settings/        # Declarative GitHub repository settings
 └── mcp/                    # MCP (Model Context Protocol) integration
 ```
+
+## Standards authority and precedence
+
+See [Standards authority](docs/standards-authority.md) for the complete source-of-truth contract.
+
+When documents conflict:
+
+1. This repository wins for applicability, repository classification, governance profiles, branch/governance policy, approval boundaries and exceptions.
+2. `Mallow-Dev/org-engineering-standards` wins for the normative engineering requirement itself.
+3. `Mallow-Dev/standards` and `Mallow-Dev/ops-deploy-standard` are implementation/tooling layers and must conform to the first two sources rather than redefine them.
+4. Live GitHub/provider state is the evidence authority for what is actually enforced or deployed.
+
+Older engineering guidance retained here remains historical or transitional unless the policy index explicitly identifies it as current. Do not copy a detailed engineering requirement here merely for convenience; link to its normative source.
 
 ## Quick Links
 
