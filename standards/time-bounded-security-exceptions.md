@@ -43,7 +43,7 @@ Public governance MUST NOT publish private repository names, branches, package/v
 
 Exact-evaluation mode preserves the original MTBSE contract. The private decision identifies the exact repository, control/scanner, ecosystem, package/component, installed version set, advisory identities, PR/ref scope and environment. A consuming evaluation matches only that exact scope.
 
-This mode remains valid for existing decisions such as the initial pilot and does not require migration merely because repository-baseline mode now exists.
+For a `schema_version: 1` decision created under MTBSE v1.0, an absent `scope.mode` MUST be interpreted as `exact-evaluation`. Such a legacy decision does not require migration merely because repository-baseline mode now exists. `schema_version: 2` decisions MUST declare `scope.mode: repository-baseline` explicitly and do not receive this compatibility default.
 
 ### 3.2 Repository-baseline mode
 
@@ -82,7 +82,7 @@ A repository-baseline decision SHOULD live on the repository's canonical default
 
 A conforming MTBSE decision MUST satisfy all of the following:
 
-1. **Explicit applicability mode.** Exact-evaluation decisions match their exact PR/ref/version scope; repository-baseline decisions match only the exact repository + component/advisory selector and never branch names.
+1. **Applicability mode.** `schema_version: 1` decisions with no `scope.mode` are treated as `exact-evaluation`; schema v1 decisions that declare a mode may declare only `exact-evaluation`. Repository-baseline decisions require `schema_version: 2` plus explicit `scope.mode: repository-baseline`, match only the exact repository + component/advisory selector and never branch names.
 2. **Unsuppressed scanner evidence.** The scanner runs normally and machine-readable evidence is retained.
 3. **Exact finding identity.** Control/scanner, ecosystem, package/component and advisory identities match exactly. Exact-evaluation additionally matches its approved versions/refs; repository-baseline proves the current scanner-reported installed version is presently affected by the approved advisory.
 4. **No collateral allowance.** Additional, changed, unmatched, malformed or ambiguous findings fail closed.
@@ -298,7 +298,7 @@ Public audit surfaces expose only non-sensitive lifecycle metadata. Detailed sec
 
 ## 15. Initial pilot and compatibility
 
-The first pilot, `MSE-2026-001`, remains a valid exact-evaluation decision under the original contract. Its full scope, vulnerability details and mitigation evidence remain private. It is not silently broadened by this version of the standard.
+The first pilot, `MSE-2026-001`, was created as an exact-evaluation decision under the original contract. A schema-v1 decision does not require migration solely because MTBSE v1.1 exists; its independent lifecycle state remains authoritative. In particular, a revoked decision revision remains terminal and cannot be restored by reopening its tracking issue.
 
 Repository-baseline adoption requires a **new** decision revision (for example `MSE-2026-002`) with its own digest, authority envelope and independent approval.
 
