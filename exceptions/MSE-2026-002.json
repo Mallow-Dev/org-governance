@@ -4,13 +4,13 @@
   "status": "active",
   "subject_visibility": "private",
   "standard_commit": "ceca7dc720e51103bbfc04d7954ded18909e9e03",
-  "decision_sha256": "69965a7ae58d09b96d1e8f36e0ec91f2b666bcfb55c48df3306844fad3d844d0",
+  "decision_sha256": "e35231bf785c1771b2604cfdcf711d56a731c65008c25c807a94c06063650dc4",
   "approval": {
     "risk_owner": "renchey",
     "required_independent_reviewers": ["MallowLiam"],
     "approved_at": "2026-09-06T14:40:00Z",
     "tracking_url": "https://github.com/Mallow-Dev/org-governance/issues/15",
-    "governance_pr_url": "https://github.com/Mallow-Dev/org-governance/pull/16",
+    "governance_pr_url": "https://github.com/Mallow-Dev/org-governance/pull/20",
     "provider_marker": "MTBSE-DECISION-APPROVED"
   },
   "window": {
