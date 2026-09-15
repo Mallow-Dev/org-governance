@@ -54,7 +54,7 @@ org-governance/
 
 ## Repository classes
 
-The default branch-protection rules apply to normal product and runtime repositories. The only lightweight exemption is the exact repository-name prefix **agent-plugin-**. It keeps pull requests, one approval, admin enforcement, conversation resolution, no force-pushes, and no branch deletion, while requiring the repository's **plugin-validation** check instead of the default two approvals, CODEOWNER review, application CI, and security-scan checks. Repositories beginning with **agent-** but not **agent-plugin-** remain on the normal rules.
+The default branch-protection rules apply to normal product and runtime repositories. The only lightweight exemption is the exact repository-name prefix **agent-plugin-**. It keeps pull requests, one approval, admin enforcement, conversation resolution, no force-pushes, and no branch deletion, while requiring the repository's **plugin-validation** check instead of the default two approvals, CODEOWNER review, application CI, and any security context not yet enrolled for that repository. Repositories beginning with **agent-** but not **agent-plugin-** remain on the normal rules.
 
 The live synchronizer in `scripts/sync-branch-protection.ts` selects this class by the exact prefix and applies the matching `main` rules.
 
