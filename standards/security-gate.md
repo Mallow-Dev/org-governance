@@ -29,7 +29,7 @@ The workflow should also run on a scheduled default-branch scan where the reposi
 
 ## Branch-protection enrollment
 
-`Security Gate` MUST be enrolled as a required status check only after the repository has published the workflow, proved a clean exact-head pull-request run, and verified that the protected branch can produce the context. A repository without the workflow MUST NOT be blocked by an unavailable security context.
+`Security Gate` MUST be enrolled as a required status check only after the repository has published the workflow, proved a clean exact-head pull-request run, and verified that the protected branch can produce the context. It is an opt-in control during migration: a repository without the workflow MUST NOT be blocked by an unavailable security context, and the organization synchronizer MUST NOT add the context globally before enrollment evidence exists.
 
 The organization baseline does not require CodeQL, GHAS, secret-scanning services, dependency-review actions, or SARIF upload. Any repository that retains one of those controls requires an explicit, source-linked exception and a migration plan to this standard.
 

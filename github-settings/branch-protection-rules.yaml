@@ -22,8 +22,8 @@ branches:
         checks:
           - context: "ci-tests"
             app_id: null # GitHub Actions
-          - context: "Security Gate"
-            app_id: null
+          # Security Gate is enrolled per repository after workflow proof;
+          # the synchronizer must not require an unavailable context globally.
 
       # Restrictions
       enforce_admins: true # Rules apply to admins too
@@ -109,7 +109,6 @@ repositories:
           required_status_checks:
             checks:
               - context: "ci-tests"
-              - context: "Security Gate"
               - context: "compliance-check" # Additional check
               - context: "performance-tests"
           enforce_admins: true
@@ -141,7 +140,7 @@ status_checks:
   # Repository-owned free security baseline
   security-gate:
     description: "Pinned Semgrep, Gitleaks and OSV-Scanner checks"
-    required: true
+    required: false # Enrol per repository only after exact-head workflow proof
     workflow: ".github/workflows/security-gate.yml"
     timeout_minutes: 15
 
