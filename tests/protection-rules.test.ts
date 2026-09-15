@@ -7,7 +7,7 @@ const pluginProtection = {
   required_status_checks: { checks: ["plugin-validation"] },
 };
 const runtimeProtection = {
-  required_status_checks: { checks: ["ci-tests", "security-scan"] },
+  required_status_checks: { checks: ["ci-tests", "Security Gate"] },
 };
 
 test("agent-plugin repositories select the lightweight class", () => {

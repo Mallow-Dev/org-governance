@@ -22,7 +22,7 @@ branches:
         checks:
           - context: "ci-tests"
             app_id: null # GitHub Actions
-          - context: "security-scan"
+          - context: "Security Gate"
             app_id: null
 
       # Restrictions
@@ -109,7 +109,7 @@ repositories:
           required_status_checks:
             checks:
               - context: "ci-tests"
-              - context: "security-scan"
+              - context: "Security Gate"
               - context: "compliance-check" # Additional check
               - context: "performance-tests"
           enforce_admins: true
@@ -138,12 +138,12 @@ status_checks:
     workflow: ".github/workflows/test.yml"
     timeout_minutes: 15
 
-  # Security Scan
-  security-scan:
-    description: "CodeQL security analysis and dependency scanning"
+  # Repository-owned free security baseline
+  security-gate:
+    description: "Pinned Semgrep, Gitleaks and OSV-Scanner checks"
     required: true
-    workflow: ".github/workflows/security.yml"
-    timeout_minutes: 10
+    workflow: ".github/workflows/security-gate.yml"
+    timeout_minutes: 15
 
   # Performance Tests
   performance-tests:
