@@ -30,7 +30,7 @@ async def list_governance_docs() -> list[str]:
     docs = []
     base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"))
     
-    for category in ["workflows", "standards", "policies", "templates"]:
+    for category in ["docs", "workflows", "standards", "policies", "templates"]:
         cat_path = os.path.join(base_path, category)
         if os.path.exists(cat_path):
             for file in os.listdir(cat_path):
