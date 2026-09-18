@@ -9,7 +9,7 @@ It is the canonical status map referenced by the standards-authority contract.
 |---|---|---|
 | `docs/standards-authority.md` | Current | Defines the organisation standards authority chain and conflict-resolution boundary. |
 | `policies/policy-index.md` | Current | Records which retained governance documents are current, transitional, historical, or implementation guidance. |
-| `github-settings/branch-protection-rules.yaml` | Transitional desired-state input | Must be reconciled against live GitHub rulesets before enforcement conclusions are drawn. |
+| `github-settings/branch-protection-rules.yaml` | Transitional desired-state input | Must be reconciled against both live GitHub rulesets and classic branch-protection state before enforcement conclusions are drawn. |
 
 ## Transitional or historical guidance
 
