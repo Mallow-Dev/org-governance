@@ -19,3 +19,17 @@ The Notion **Mallow Standards** area is a human-readable portal/index. It must l
 - Live GitHub and provider reads prove actual enforcement/deployment state; prose alone is not runtime evidence.
 
 Report unresolved contradictions instead of silently choosing a convenient source. A change spanning applicability and normative content requires coordinated review in both authority repositories.
+
+## Executable catalogue boundary
+
+`policies/standards-index.json` is the editable source inventory and lifecycle
+map. `policies/policy-index.md` is generated from it. The engineering repository
+pins this index and its validator by exact Git revision and SHA-256, adds control
+implementation/evidence metadata, and renders the integrated reader/consumer
+view. This is composition of the existing authorities, not a new authority.
+
+Policy lifecycle, implementation state and repository adoption are distinct.
+No open PR, installed preset, candidate bundle or recorded reference alone proves
+live enforcement. Provider changes remain separately authorised and verified.
+The old classic-protection mutation path is retired rather than reconciled by
+blindly replaying the historic YAML.

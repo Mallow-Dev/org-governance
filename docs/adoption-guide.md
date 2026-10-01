@@ -40,7 +40,7 @@ Ensure your repository follows the [Git Branching Strategy](../workflows/git-bra
 
 ### 3. Enable Branch Protection
 
-Configure branch protection rules as defined in [Branch Protection Rules](../github-settings/branch-protection-rules.yaml).
+Use the [generated standards index](../policies/policy-index.md) and verified live rulesets. The legacy YAML/synchroniser is retired; it is not an applicable mutation payload. Propose provider changes separately after exact-target review.
 
 - Require pull request reviews before merging.
 - Require status checks to pass.

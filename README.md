@@ -133,3 +133,12 @@ This repository is maintained by the organization's technical leadership. For qu
 
 **Last Updated**: 2025-11-23  
 **Maintained by**: Organization Technical Leadership
+
+## Executable standards index
+
+Start at [`policies/policy-index.md`](policies/policy-index.md), generated from
+[`policies/standards-index.json`](policies/standards-index.json). Run
+`npm run standards:check` to validate authority and detect projection drift.
+The private engineering repository supplies the integrated control view and
+immutable candidate-bundle verifier. Candidate does not mean effective policy.
+The obsolete classic-protection synchroniser is retired and cannot make writes.
