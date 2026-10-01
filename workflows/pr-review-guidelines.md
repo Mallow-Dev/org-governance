@@ -267,10 +267,13 @@ See `workflows/git-branching-strategy.md` for full details.
 
 ### Helpful Integrations
 
-- **CodeQL**: Security scanning
-- **Dependabot**: Dependency updates
+- **Semgrep Community Edition**: Static application security testing through the repository-owned Security Gate
+- **Gitleaks**: Redacted secret detection through the repository-owned Security Gate
+- **OSV-Scanner**: Open-source dependency vulnerability scanning through the repository-owned Security Gate
 - **Linters**: Automated code style checks
 - **Coverage reports**: Test coverage tracking
+
+The organization baseline does not require GitHub Advanced Security, CodeQL, SARIF upload, or GitHub security-scanning APIs. Repositories that require a security status check MUST publish the stable `Security Gate` context from a pinned, repository-owned workflow before enrolling that context in branch protection. See [Security Gate Standard](../standards/security-gate.md).
 
 ---
 

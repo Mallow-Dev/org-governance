@@ -152,7 +152,7 @@
       "status": "transitional",
       "owner": "Mallow engineering standards owners",
       "disposition": "migrate",
-      "note": "Inventory and migrate or supersede overlapping requirements in the normative engineering repository. No automatic promotion occurs here."
+      "note": "Historical or transitional catch-all only. Explicit current governance source entries take precedence over this wildcard; migrate other overlapping engineering detail by reviewed changes without weakening existing approved controls."
     },
     {
       "id": "bootstrap-templates",
@@ -175,6 +175,50 @@
       "owner": "Mallow technical governance",
       "disposition": "reference-only",
       "note": "The old mutation payload is retired because it contradicts live rules. No replay of obsolete approvals, check names or example exceptions is allowed."
+    },
+    {
+      "id": "mtbse-governance",
+      "title": "Security exception applicability and lifecycle",
+      "repository": "Mallow-Dev/org-governance",
+      "path": "standards/time-bounded-security-exceptions.md",
+      "role": "governance",
+      "status": "current",
+      "owner": "Mallow technical governance",
+      "disposition": "retain",
+      "note": "Retain the merged exception approval, lifecycle and private-envelope governance. Technical enforcement remains SEC-004 in engineering standards; the generic legacy standards entry does not supersede this explicit authority."
+    },
+    {
+      "id": "security-approver-registry",
+      "title": "Security exception approver registry",
+      "repository": "Mallow-Dev/org-governance",
+      "path": "standards/security-exception-approvers.json",
+      "role": "governance",
+      "status": "current",
+      "owner": "Mallow technical governance",
+      "disposition": "retain",
+      "note": "Retain the canonical approval-role registry. A candidate catalogue does not alter its members or authorise an exception."
+    },
+    {
+      "id": "security-gate-governance",
+      "title": "Free Security Gate baseline and enrollment decision",
+      "repository": "Mallow-Dev/org-governance",
+      "path": "standards/security-gate.md",
+      "role": "governance",
+      "status": "current",
+      "owner": "Mallow technical governance",
+      "disposition": "retain",
+      "note": "Preserve the merged no-paid-GHAS baseline and evidence-before-enrollment decision. Migrate overlapping technical requirements through coordinated review, never by silently weakening the existing baseline."
+    },
+    {
+      "id": "exception-envelopes",
+      "title": "Public non-sensitive exception authority envelopes",
+      "repository": "Mallow-Dev/org-governance",
+      "path": "exceptions/*",
+      "role": "governance",
+      "status": "current",
+      "owner": "Mallow technical governance",
+      "disposition": "retain",
+      "note": "Retain the existing public authority-envelope mechanism. Validity still requires current provider approvals, unrevoked scope, private decision digest and time boundaries; the catalogue does not grant acceptance."
     }
   ],
   "external_surfaces": [

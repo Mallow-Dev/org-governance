@@ -34,6 +34,10 @@ The engineering [STANDARDS.md](https://github.com/Mallow-Dev/org-engineering-sta
 | `legacy-engineering` | `Mallow-Dev/org-governance/standards/*` | historical | transitional | migrate | Mallow engineering standards owners |
 | `bootstrap-templates` | `Mallow-Dev/org-governance/templates/*` | implementation | current | implement-only | Template maintainers |
 | `retired-protection-writer` | `Mallow-Dev/org-governance/github-settings/branch-protection-rules.yaml` | historical | historical | reference-only | Mallow technical governance |
+| `mtbse-governance` | `Mallow-Dev/org-governance/standards/time-bounded-security-exceptions.md` | governance | current | retain | Mallow technical governance |
+| `security-approver-registry` | `Mallow-Dev/org-governance/standards/security-exception-approvers.json` | governance | current | retain | Mallow technical governance |
+| `security-gate-governance` | `Mallow-Dev/org-governance/standards/security-gate.md` | governance | current | retain | Mallow technical governance |
+| `exception-envelopes` | `Mallow-Dev/org-governance/exceptions/*` | governance | current | retain | Mallow technical governance |
 
 ## Source-specific boundaries
 
@@ -61,11 +65,19 @@ The engineering [STANDARDS.md](https://github.com/Mallow-Dev/org-engineering-sta
 
 **Review operating guidance:** Interpret with approved engineering review requirements and independent reviewer identity; do not silently introduce additional approval counts.
 
-**Legacy detailed engineering guidance:** Inventory and migrate or supersede overlapping requirements in the normative engineering repository. No automatic promotion occurs here.
+**Legacy detailed engineering guidance:** Historical or transitional catch-all only. Explicit current governance source entries take precedence over this wildcard; migrate other overlapping engineering detail by reviewed changes without weakening existing approved controls.
 
 **Governance bootstrap templates:** Templates initialise consumers; ongoing compliance requires versioned adoption and live evidence.
 
 **Retired classic-protection synchronisation:** The old mutation payload is retired because it contradicts live rules. No replay of obsolete approvals, check names or example exceptions is allowed.
+
+**Security exception applicability and lifecycle:** Retain the merged exception approval, lifecycle and private-envelope governance. Technical enforcement remains SEC-004 in engineering standards; the generic legacy standards entry does not supersede this explicit authority.
+
+**Security exception approver registry:** Retain the canonical approval-role registry. A candidate catalogue does not alter its members or authorise an exception.
+
+**Free Security Gate baseline and enrollment decision:** Preserve the merged no-paid-GHAS baseline and evidence-before-enrollment decision. Migrate overlapping technical requirements through coordinated review, never by silently weakening the existing baseline.
+
+**Public non-sensitive exception authority envelopes:** Retain the existing public authority-envelope mechanism. Validity still requires current provider approvals, unrevoked scope, private decision digest and time boundaries; the catalogue does not grant acceptance.
 
 ## Other places instructions appear
 

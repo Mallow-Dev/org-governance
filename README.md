@@ -67,11 +67,18 @@ Older engineering guidance retained here remains historical or transitional unle
 - [Security Policy](policies/security-policy.md)
 - [Contribution Guidelines](policies/contribution-guidelines.md)
 
-## Repository classes
+## Repository classes and retired synchronisation
 
-The default branch-protection rules apply to normal product and runtime repositories. The only lightweight exemption is the exact repository-name prefix **agent-plugin-**. It keeps pull requests, one approval, admin enforcement, conversation resolution, no force-pushes, and no branch deletion, while requiring the repository's **plugin-validation** check instead of the default two approvals, CODEOWNER review, application CI, and security-scan checks. Repositories beginning with **agent-** but not **agent-plugin-** remain on the normal rules.
+The former YAML and class-selection examples are historical, not the current
+provider desired state. The exact `agent-plugin-` prefix remains a tested legacy
+classification helper; it does not independently establish approvals or required
+checks. Read the current governance index, approved repository declaration and
+live rulesets before applying a class. Do not infer two approvals or CODEOWNER
+requirements from the retired default payload.
 
-The live synchronizer in `scripts/sync-branch-protection.ts` selects this class by the exact prefix and applies the matching `main` rules.
+`scripts/sync-branch-protection.ts` is retired and fails without provider writes.
+The newer Security Gate and MTBSE governance decisions are explicitly retained
+in the canonical index; retirement of the old writer does not weaken them.
 
 ## Usage
 
