@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "sync:protection": "tsx scripts/sync-branch-protection.ts",
-    "test": "tsx --test tests/*.test.ts"
+    "test": "tsx --test tests/*.test.ts",
+    "standards:check": "node scripts/standards-index.mjs check",
+    "standards:render": "node scripts/standards-index.mjs render"
   },
   "dependencies": {
     "@octokit/rest": "^20.0.0",
